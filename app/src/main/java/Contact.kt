@@ -1,1 +1,2 @@
-data class Contact(val id: Int, var name: String, var phone: String)
+data class Contact(val name1: Int, var name: String, var phone: String)
+

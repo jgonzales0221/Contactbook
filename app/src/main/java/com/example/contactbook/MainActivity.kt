@@ -48,9 +48,9 @@ class ContactViewModel(application: Application) : AndroidViewModel(application)
         saveContacts()
     }
 
-    fun updateContact(contact: Contact, name: String, phone: String) {
-        contact.name = name
-        contact.phone = phone
+    fun updateContact(contact: Contact, nName: String, nPhone: String) {
+        contact.name = nName
+        contact.phone = nPhone
         saveContacts()
     }
 
@@ -88,22 +88,24 @@ fun ContactList(contacts: List<Contact>, viewModel: ContactViewModel) {
 fun ContactItem(contact: Contact, viewModel: ContactViewModel) {
     var isEditing by remember { mutableStateOf(false) }
     var showDeleteConfirmation by remember { mutableStateOf(false) }
+    var editedName by remember { mutableStateOf(contact.name) }
+    var editedPhone by remember { mutableStateOf(contact.phone) }
 
     Column {
         if (isEditing) {
             // Editing mode
             TextField(
-                value = contact.name,
-                onValueChange = { contact.name = it },
+                value = editedName,
+                onValueChange = { editedName = it },
                 label = { Text("Name") }
             )
             TextField(
-                value = contact.phone,
-                onValueChange = { contact.phone = it },
+                value = editedPhone,
+                onValueChange = { editedPhone = it },
                 label = { Text("Phone") }
             )
             Button(onClick = {
-                viewModel.updateContact(contact, contact.name, contact.phone)
+                viewModel.updateContact(contact, editedName, editedPhone)
                 isEditing = false
             }) {
                 Text("Save")
@@ -122,12 +124,11 @@ fun ContactItem(contact: Contact, viewModel: ContactViewModel) {
                     Text("Delete")
                 }
 
-                // Confirmation Dialog for Delete
+                // Delete confirmation dialog
                 if (showDeleteConfirmation) {
                     AlertDialog(
                         onDismissRequest = { showDeleteConfirmation = false },
                         title = { Text("Delete Contact") },
-                        text = { Text("Are you sure you want to delete this contact?") },
                         confirmButton = {
                             Button(onClick = {
                                 viewModel.deleteContact(contact)
@@ -137,9 +138,7 @@ fun ContactItem(contact: Contact, viewModel: ContactViewModel) {
                             }
                         },
                         dismissButton = {
-                            Button(onClick = {
-                                showDeleteConfirmation = false
-                            }) {
+                            Button(onClick = { showDeleteConfirmation = false }) {
                                 Text("Cancel")
                             }
                         }
@@ -149,6 +148,7 @@ fun ContactItem(contact: Contact, viewModel: ContactViewModel) {
         }
     }
 }
+
 
 @Composable
 fun AddContactForm(onAddContact: (String, String) -> Unit) {

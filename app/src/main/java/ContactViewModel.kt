@@ -22,9 +22,9 @@ class ContactViewModel(application: Application) : AndroidViewModel(application)
         saveContacts()
     }
 
-    fun updateContact(contact: Contact, name: String, phone: String) {
-        contact.name = name
-        contact.phone = phone
+    fun updateContact(contact: Contact, nName: String, nPhone: String) {
+        contact.name = nName
+        contact.phone = nPhone
         saveContacts()
     }
 
